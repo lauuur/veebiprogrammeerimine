@@ -84,4 +84,26 @@ function showcats(){
 	
 	}
 
+	function signup($firstName, $lastName, $birthDate, $gender, $email, $password){
+		$notice="";
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"],$GLOBALS["database"]);
+		$stmt = $mysqli->prepare("INSERT INTO vpusers(firstname, lastname, birthdate, gender, email, password) VALUES (?, ?, ?, ?, ?, ?)");
+		echo $mysqli->error;
+		//valmistame parooli ette salvestamiseks, krüpteerime, teeme räsi(hash)
+		$options=[
+		"cost"=>12,
+		"salt"=>substr(sha1(rand()), 0, 22),];
+		$pwdhash=password_hash($password, PASSWORD_BCRYPT, $options);
+		$stmt->bind_param("sssiss", $firstName, $lastName, $birthDate, $gender, $email, $pwdhash);
+		if($stmt->execute()){
+			$notice="Uue kasutaja lisamine õnnestus";
+		}else{
+			$notice="Kasutaja lisamisel tekkis viga: ". $stmt->error;
+		}
+		
+		
+		$stmt->close();
+		$mysqli->close();
+		return $notice;
+	}
 ?>
