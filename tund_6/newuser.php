@@ -20,6 +20,7 @@ require("functions.php");
   $genderError="";
   $emailError="";
   $passwordError="";
+  $confirmpasswordError="";
   
   $monthNamesET = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni","juuli", "august", "september", "oktoober", "november", "detsember"];
   
@@ -58,6 +59,7 @@ require("functions.php");
 	 $passwordError = "Parool peaks olema vähemalt 8 tähte";
  }
 
+ 
 
   //kui päev kuu ja aasta on olemas ja kontrollitud
   //võiks ju hoopis kontrollida, kas kuupäevadega seotud error muutujad on endiselt tühjad
@@ -75,7 +77,7 @@ require("functions.php");
   }
   
   //kui kõik korras, siis salvestan kasutaja
-  if(empty($firstNameError) and empty($lastNameError) and empty($birthMonthError) and empty($birthYearError) and empty($birthDayError) and empty($birthDateError) and empty($genderError) and empty($emailError) and empty($passwordError)){
+  if(empty($firstNameError) and empty($lastNameError) and empty($birthMonthError) and empty($birthYearError) and empty($birthDayError) and empty($birthDateError) and empty($genderError) and empty($emailError) and empty($passwordError) and empty($confirmpasswordError)){
 	  $notice=signup($firstName, $lastName, $birthDate, $gender, $_POST["email"], $_POST["password"]);
 	  
   }
@@ -151,14 +153,16 @@ require("functions.php");
 	  
 	 <br>
 	 
-	 <input type="radio" name="gender" value="2" <?php if ($gender==2){echo "checked";}?>><label>Naine</label><br>
+	 <input type="radio" name="gender" value="2" <?php if ($gender==2){echo "checked";}?>><label>Naine</label>
 	 <input type="radio" name="gender" value="1" <?php if ($gender==1){echo "checked";}?>><label>Mees</label>
 	 <span><?php echo $genderError;?></span><br>
 	 <label>E-postiaadress (kasutajatunnuseks) </label><input name="email" type="email">
 	 <?php echo $emailError;?>
 	 <br>
-	 <label>Salasõna (min 8 märki) </label><input name="password" type="password">
+	 <label>Salasõna (min 8 märki) </label><input name="password" type="password"><br>
+	 <label>Salasõna uuesti </label><input name="confirmpassword" type="password">
 	 <?php echo $passwordError;?>
+	 <?php echo $confirmpasswordError;?>
 	 <br>
 	 <input type="submit" name="submitUserData" value="Loo kasutaja">
     </form>
