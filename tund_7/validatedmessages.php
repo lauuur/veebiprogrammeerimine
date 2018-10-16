@@ -13,16 +13,16 @@
 	  header("Location: index_1.php");
 	  exit();
   }
-  $messages=readallunvalidatedmessages();
+  $messages=readallvalidatedmessagesbyuser();
   
 ?>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Anonüümsed sõnumid</title>
+  <title>Valideeritud sõnumid</title>
 </head>
-<body style="font-family:comic sans ms;">
+<body>
   <h1>Sõnumid</h1>
   <p>Siin on minu <a href="http://www.tlu.ee">TLÜ</a> õppetöö raames valminud veebilehed. Need ei oma mingit sügavat sisu ja nende kopeerimine ei oma mõtet.</p>
   <hr>
@@ -31,7 +31,7 @@
 	<li><a href="main.php">Tagasi</a> pealehele!</li>
   </ul>
   <hr>
-  <h2>Valideerimata sõnumid</h2>
+  <h2>Valideeritud sõnumid</h2>
   <?php echo $messages;?>
   
 

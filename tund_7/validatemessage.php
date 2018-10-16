@@ -29,7 +29,7 @@
   <meta charset="utf-8">
   <title>Anonüümsed sõnumid</title>
 </head>
-<body style="font-family:comic sans ms;">
+<body>
   <h1>Sõnumid</h1>
   <p>Siin on minu <a href="http://www.tlu.ee">TLÜ</a> õppetöö raames valminud veebilehed. Need ei oma mingit sügavat sisu ja nende kopeerimine ei oma mõtet.</p>
   <hr>
@@ -41,7 +41,7 @@
   <h2>Valideeri see sõnum:</h2>
   <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
     <input name="id" type="hidden" value="<?php echo $_GET["id"]; ?>">
-    <p><?php echo $msg; ?></p>
+    <p><?php echo $msg; ?></p> 
     <input type="radio" name="validation" value="0" checked><label>Keela näitamine</label><br>
     <input type="radio" name="validation" value="1"><label>Luba näitamine</label><br>
     <input type="submit" value="Kinnita" name="submitValidation">

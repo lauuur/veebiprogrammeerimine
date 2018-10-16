@@ -29,6 +29,7 @@ $notice=null;
 	  <br>
 	  <textarea style="font-family:comic sans ms;" rows="4" cols="64" name="message">sisesta siia oma sõnum: </textarea>
 	  <br>
+	  <p><a href="index_1.php">Tagasi sisselogimislehele</a></p>
 	  <input type="submit" name="submitMessage" value="salvesta sõnum">
     </form>
 	<hr>

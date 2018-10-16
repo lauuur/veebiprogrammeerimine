@@ -29,8 +29,10 @@
 	<hr>
 	<ul>
       <li><a href="?logout=1">Logi välja</a></li>
-	  <li>Süsteemi <a href="users.php">kasutajad</a>.</li>
+	  <li><a href="users.php">Süsteemi kasutajad</a>.</li>
 	  <li><a href="validatemsg.php">Valideeri anonüümseid sõnumeid</a></li>
+	  <li><a href="validatedmessages.php">Näita valideeritud sõnumeid valideerijate kaupa</a></li>
+	  <li><a href="userprofile.php">Profiili loomine</a>.</li>
 	</ul>
 	
   </body>

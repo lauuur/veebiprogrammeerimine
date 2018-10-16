@@ -10,13 +10,95 @@ $database="if18_laur_to_1";
 //võtan kasutusele sessiooni
 session_start();
 
+//kasutajate profiilid
+function description($message, $bgcolor, $textcolor){
+		$notice = "";
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		$stmt1 = $mysqli->prepare("SELECT userid, description, bgcolor, txtcolor FROM vpuserprofiles");
+		echo $mysqli->error;
+		$stmt2 ->bind_result($useridFromDb,$message,$bgcolor,$textcolor);
+		
+		if($stmt1->fetch()){
+			$stmt2 = $mysqli->prepare("UPDATE description, bgcolor, txtcolor FROM vpuserprofiles VALUES(?,?,?)");
+			echo $mysqli->error;
+			$stmt2->bind_param("sss",$message,$bgcolor,$textcolor);
+			if($stmt1->execute()){
+				$notice = 'Kirjeldus: "'.$message.'" on uuendatud';
+			}
+		}else{
+			$stmt2 = $mysqli->prepare("INSERT INTO vpuserprofiles(userid, description, bgcolor, txtcolor) VALUES(?,?,?,?)");
+			echo $mysqli->error;
+			$stmt2->bind_param("isss",$_SESSION["userId"],$message,$bgcolor,$textcolor);
+			if($stmt2->execute()){
+				$notice = 'Kirjeldus: "'.$message.'" on salvestatud';
+			}
+			$stmt1->close();
+			$stmt2->close();
+			$mysqli->close();
+			return $notice;
+			}		
+	 }
+/*function adduserprofile(){
+	$asd="";
+	$notice="";
+	$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+	$stmt=$mysqli->prepare("INSERT INTO vpuserprofiles(userid, description, bgcolor, txtcolor) VALUES(?,?,?,?)");
+	$stmt->execute();
+	if ($stmt->execute()){
+		$notice='profiil: "' .$asd. '" on salvestatud.';
+	} else{
+		$notice="profiili loomisel tekkis tõrge: ". $stmt->error;
+	}
+	
+	$stmt->close();
+	$mysqli->close();
+}*/
+
+//valideeritud sõnumid kasutajate kaupa
+function readallvalidatedmessagesbyuser(){
+$msghtml="";
+$totalhtml="";
+$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+$stmt=$mysqli->prepare("SELECT id, firstname, lastname FROM vpusers");
+echo $mysqli->error;
+$stmt->bind_result($idFromDb, $firstnameFromDb, $lastnameFromDb);
+$stmt2=$mysqli->prepare("SELECT message, accepted FROM vpamsg WHERE acceptedby=?");
+echo $mysqli->error;
+$stmt2->bind_param("i", $idFromDb);
+$stmt2->bind_result($msgFromDb, $acceptedFromDb);
+$stmt->execute();
+//et hoida andmebaasist loetud andmeid pisut kauem mälus, et  saaks edasi kasutada
+$stmt->store_result();
+
+while ($stmt->fetch()){
+	
+	$msghtml.="<h3>".$firstnameFromDb." ".$lastnameFromDb."</h3>\n";
+	$stmt2->execute();
+	while ($stmt2->fetch()){
+	$msghtml.="<p><b>";
+		if($acceptedFromDb==1){
+		$msghtml.="Lubatud: ";
+		}else{
+		$msghtml.="Keelatud: ";
+		}
+		$msghtml.="</b>".$msgFromDb."</p>\n";
+	
+	}
+	
+}
+$stmt2->close();
+$stmt->close();
+$mysqli->close();
+return $msghtml;
+}
+
 //kasutajate nimekiri
   function listusers(){
 	$notice = "";
 	$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
 	$stmt = $mysqli->prepare("SELECT firstname, lastname, email FROM vpusers WHERE id !=?");
 	
-	$mysqli->error;
+	echo $mysqli->error;
 	$stmt->bind_param("i", $_SESSION["userId"]);
 	$stmt->bind_result($firstname, $lastname, $email);
 	if($stmt->execute()){
@@ -26,7 +108,7 @@ session_start();
 	  }
 	  $notice .= "</ol> \n";
 	} else {
-		$notice = "<p>Kasutajate nimekirja lugemisel tekkis tehniline viga! " .$stmt->error;
+		$notice = "Kasutajate nimekirja lugemisel tekkis tehniline viga! " .$stmt->error;
 	}
 	
 	$stmt->close();
