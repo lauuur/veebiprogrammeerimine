@@ -100,6 +100,5 @@ public function changePhotoSize($width, $height){
 	}
 	
 	
-	
 }
 ?>
